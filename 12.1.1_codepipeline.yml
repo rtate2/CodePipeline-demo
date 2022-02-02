@@ -1,5 +1,5 @@
 ---
-AWSTemplateVersion: "2010-09-09"
+AWSTemplateFormatVersion: "2010-09-09"
 Description: Randy's GitHub CodePipeline Stack
 
 Parameters:
@@ -7,8 +7,8 @@ Parameters:
     Type: String
     NoEcho: true
     MinLength: 40
-    MaxLenght: 40
-    AllowedPattern: "[a-z0-9]*"
+    MaxLength: 40
+    AllowedPattern: "^[a-zA-z0-9_]*$"
 
   GitHubOwner:
     Type: String
@@ -86,7 +86,7 @@ Resources:
     Properties:
       ArtifactStore:
         Type: S3
-        Locations: !Ref RandyArtifactBucket
+        Location: !Ref RandyArtifactBucket
       RestartExecutionOnUpdate: true
       RoleArn: !GetAtt RandyCodepipelineServiceRole.Arn
       Stages:
@@ -144,6 +144,6 @@ Resources:
         - JsonPath: "$.ref"
           MatchEquals: refs/heads/{Branch}
       TargetPipeline: !Ref RandyPipeline
-      TargetAction: Source
+      TargetAction: SourceAction
       TargetPipelineVersion: !GetAtt RandyPipeline.Version
-## Exec: aws cloudformation create-stack --stack-name rt-m12u1x1-stack --template-body file://12.1.1_codepipeline.yml --parameters file://codepipeline_parameters.json --region us-east-1
+## Exec: aws cloudformation create-stack --stack-name rt-m12u1x1-stack --template-body file://12.1.1_codepipeline.yml --parameters file://codepipeline_parameters.json --region us-east-1 --capabilities CAPABILITY_NAMED_IAM
